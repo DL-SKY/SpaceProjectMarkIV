@@ -2,11 +2,13 @@
 using SpaceProject.Constants;
 using SpaceProject.Events;
 using SpaceProject.Services;
+using System;
 using UnityEngine;
 
 
 namespace SpaceProject.InputSystem.Adapters
 {
+    [Obsolete]
     public class GameplayCameraStandaloneAdapter : InputAdapter
     {
         private GameplayCameraController camera;

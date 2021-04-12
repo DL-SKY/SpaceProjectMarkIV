@@ -1,14 +1,12 @@
 ﻿using SpaceProject.Constants;
+using SpaceProject.Events;
 using SpaceProject.Patterns;
 using SpaceProject.Services;
-using SpaceProject.UI.WindowsManager;
+using SpaceProject.UI.Windows.FPS;
 using SpaceProject.UI.Windows.Loading;
-using System.Collections;
-using System.Collections.Generic;
+using SpaceProject.UI.WindowsManager;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Linq;
-using SpaceProject.UI.Windows.FPS;
 
 namespace SpaceProject.Application
 {
@@ -21,11 +19,15 @@ namespace SpaceProject.Application
 
         private void Start()
         {
+            SceneManager.sceneLoaded += OnSceneLoadedHandler;
+
             Initialize();
         }
 
         protected override void OnDestroy()
         {
+            SceneManager.sceneLoaded -= OnSceneLoadedHandler;
+
             base.OnDestroy();
         }
 
@@ -49,6 +51,10 @@ namespace SpaceProject.Application
             windowsManager.CreateWindow<FPSWindow>(FPSWindow.prefabPath, Enums.EnumWindowsLayer.Special);
         }
 
-
+        private void OnSceneLoadedHandler(Scene _scene, LoadSceneMode _loadSceneMode)
+        {
+            Debug.LogWarning("[GameManager] OnSceneLoadedHandler() " + _scene.name);
+            EventManager.DispatchEvent(ConstantEventsName.ON_SCENE_LOADED, _scene.name);
+        }
     }
 }
