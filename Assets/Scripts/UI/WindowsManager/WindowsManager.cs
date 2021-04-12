@@ -46,10 +46,10 @@ namespace SpaceProject.UI.WindowsManager
             var prefab = Resources.Load<GameObject>(string.Format(_pathPrefab));
             var layer = layers.Find((x) => x.key == _layer)?.value ?? transform;
             var window = Instantiate(prefab, layer).GetComponent<T>();
-
-            window.Initialize(_data);
-            window.OnClose += OnCloseHandler;
             
+            window.OnClose += OnCloseHandler;
+            window.Initialize(_data);
+
             windows.Add(window);
 
             OnCreateWindow?.Invoke(window);

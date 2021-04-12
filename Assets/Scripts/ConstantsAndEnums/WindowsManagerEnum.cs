@@ -2,10 +2,13 @@
 {
     public enum EnumWindowsLayer
     { 
-        Main,
-        Dialogs,
-        Loading,
+        Main = 0,
+        Dialogs = 1,
+        Loading = 2,
+        World = 3,
 
-        Errors,
+        Special = 20,
+
+        Errors = 50,
     }
 }

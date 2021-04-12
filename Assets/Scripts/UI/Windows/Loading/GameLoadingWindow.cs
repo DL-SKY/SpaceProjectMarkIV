@@ -1,7 +1,7 @@
-﻿using SpaceProject.Constants;
+﻿using SpaceProject.Services;
+using SpaceProject.UI.Windows.MainMenu;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace SpaceProject.UI.Windows.Loading
 {
@@ -9,34 +9,45 @@ namespace SpaceProject.UI.Windows.Loading
     {
         public const string prefabPath = @"Prefabs\UI\Windows\Loading\GameLoadingWindow";
 
-        private string sceneName;
+        //private string sceneName;
+        private MainMenuWindow mainMenu;
 
 
         public override void Initialize(object _data)
         {
+            //sceneName = (string)_data;
+
+            //var operation = SceneManager.LoadSceneAsync(sceneName);
+            //StartCoroutine(UpdateProgress(operation));
+
+            var windowsManager = ComponentLocator.Resolve<WindowsManager.WindowsManager>();
+            mainMenu = windowsManager.CreateWindow<MainMenuWindow>(MainMenuWindow.prefabPath, Enums.EnumWindowsLayer.Main);
+            mainMenu.OnInitialize += OnInitializeHandler;
+
             base.Initialize(_data);
-
-            sceneName = (string)_data;
-
-            var operation = SceneManager.LoadSceneAsync(sceneName);
-            StartCoroutine(UpdateProgress(operation));
         }
 
 
-        private IEnumerator UpdateProgress(AsyncOperation _operation)
+        private void OnInitializeHandler()
         {
-            if (_operation == null)
-                yield break;
-
-            while (!_operation.isDone)
-            {
-                Debug.LogError("Progress : " + _operation.progress);
-                yield return null;
-            }
-
-            //yield return new WaitForSeconds(2.5f);
-
+            mainMenu.OnInitialize -= OnInitializeHandler;
             Close();
         }
+
+        //private IEnumerator UpdateProgress(AsyncOperation _operation)
+        //{
+        //    if (_operation == null)
+        //        yield break;
+
+        //    while (!_operation.isDone)
+        //    {
+        //        Debug.LogError("Progress : " + _operation.progress);
+        //        yield return null;
+        //    }
+
+        //    //yield return new WaitForSeconds(2.5f);
+
+        //    Close();
+        //}
     }
 }

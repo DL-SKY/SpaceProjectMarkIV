@@ -6,6 +6,9 @@ using SpaceProject.UI.Windows.Loading;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using System.Linq;
+using SpaceProject.UI.Windows.FPS;
 
 namespace SpaceProject.Application
 {
@@ -27,11 +30,25 @@ namespace SpaceProject.Application
         }
 
 
+        public AsyncOperation LoadSceneAsync(string _sceneName)
+        {
+            return SceneManager.LoadSceneAsync(_sceneName);
+        }
+
+        public bool CheckCurrentScene(string _sceneName)
+        {
+            return SceneManager.GetActiveScene().name == _sceneName;
+        }
+
+
         //TODO
         private void Initialize()
         {
             var windowsManager = ComponentLocator.Resolve<WindowsManager>();
-            windowsManager.CreateWindow<GameLoadingWindow>(GameLoadingWindow.prefabPath, Enums.EnumWindowsLayer.Loading, ConstantScenes.MAIN_MENU);
+            windowsManager.CreateWindow<GameLoadingWindow>(GameLoadingWindow.prefabPath, Enums.EnumWindowsLayer.Loading);
+            windowsManager.CreateWindow<FPSWindow>(FPSWindow.prefabPath, Enums.EnumWindowsLayer.Special);
         }
+
+
     }
 }

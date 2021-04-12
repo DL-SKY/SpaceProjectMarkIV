@@ -16,8 +16,9 @@ namespace SpaceProject.UI.Windows.Test
 
         public override void Initialize(object _data)
         {
-            base.Initialize(_data);
             touchController.ResetProgress();
+
+            base.Initialize(_data);
         }
 
         public override void Close(bool _result = false)

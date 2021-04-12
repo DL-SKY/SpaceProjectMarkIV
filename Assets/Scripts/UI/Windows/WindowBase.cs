@@ -5,7 +5,8 @@ namespace SpaceProject.UI.Windows
 {
     public class WindowBase : MonoBehaviour
     {
-        public Action<bool, WindowBase> OnClose;
+        public Action OnInitialize;
+        public Action<bool, WindowBase> OnClose;        
 
         [Header("Main Settings")]
         [SerializeField] protected bool canUseEsc;
@@ -13,7 +14,7 @@ namespace SpaceProject.UI.Windows
 
         public virtual void Initialize(object _data)
         {
-
+            OnInitialize?.Invoke();
         }
 
         public virtual void Close(bool _result = false)
