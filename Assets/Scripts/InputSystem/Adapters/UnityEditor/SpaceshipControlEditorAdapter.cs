@@ -30,19 +30,35 @@ namespace SpaceProject.InputSystem.Adapters
 
         protected override void CustomUpdate()
         {
-            //TODO
-
             //тангаж (pitch)
+            if (Input.GetKey(KeyCode.W))
+                playerSpaceship.Spaceship.OnPitch(PitchMode.ToUp);
+            if (Input.GetKey(KeyCode.S))
+                playerSpaceship.Spaceship.OnPitch(PitchMode.ToDown);
+
             //крен (roll)
+            if (Input.GetKey(KeyCode.A))
+                playerSpaceship.Spaceship.OnRoll(RollMode.ToLeft);
+            if (Input.GetKey(KeyCode.D))
+                playerSpaceship.Spaceship.OnRoll(RollMode.ToRight);
 
             //рыскание (yaw)
+            if (Input.GetKey(KeyCode.Q))
+                playerSpaceship.Spaceship.OnYaw(YawMode.ToLeft);
+            if (Input.GetKey(KeyCode.E))
+                playerSpaceship.Spaceship.OnYaw(YawMode.ToRight);
 
             //вверх/вниз
             if (Input.GetKey(KeyCode.UpArrow))
-                playerSpaceship.transform.Translate(Vector3.up * Time.deltaTime);
+                playerSpaceship.Spaceship.OnStrafe(StrafeMode.ToUp);
             if (Input.GetKey(KeyCode.DownArrow))
-                playerSpaceship.transform.Translate(- Vector3.up * Time.deltaTime);
+                playerSpaceship.Spaceship.OnStrafe(StrafeMode.ToDown);
+
             //влево/вправо
+            if (Input.GetKey(KeyCode.LeftArrow))
+                playerSpaceship.Spaceship.OnStrafe(StrafeMode.ToLeft);
+            if (Input.GetKey(KeyCode.RightArrow))
+                playerSpaceship.Spaceship.OnStrafe(StrafeMode.ToRight);
         }
 
         private void OnPlayerSpaceshipCreateHandler(CustomEvent _event)
