@@ -3,23 +3,32 @@ using UnityEngine;
 
 namespace SpaceProject.Tools.Components
 {
-    public class AutoLocatorObject : DontDestroyObject
+    public class AutoLocatorObject : MonoBehaviour
     {
         [Tooltip("Если NULL - автоопределение")]
         [SerializeField] protected Component component;
 
-        protected override void Awake()
+
+        protected void Awake()
         {
-            base.Awake();
+            DontDestroyOnLoad(gameObject);
 
             if (component == null)
                 component = this;
             ComponentLocator.Register(component);
+
+            CustomAwake();
         }
 
-        protected virtual void OnDestroy()
+        protected void OnDestroy()
         {
             ComponentLocator.Unregister(component.GetType());
+
+            CustomOnDestroy();
         }
+
+
+        protected virtual void CustomAwake() { }
+        protected virtual void CustomOnDestroy() { }
     }
 }

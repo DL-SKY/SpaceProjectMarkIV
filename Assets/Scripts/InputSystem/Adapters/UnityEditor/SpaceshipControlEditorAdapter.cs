@@ -1,4 +1,5 @@
 ﻿using SpaceProject.Constants;
+using SpaceProject.Data.Objects.Spaceship;
 using SpaceProject.Events;
 using SpaceProject.Objects.Spaceship;
 using SpaceProject.Services;

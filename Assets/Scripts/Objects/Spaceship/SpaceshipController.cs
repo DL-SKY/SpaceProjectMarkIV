@@ -4,55 +4,6 @@ using UnityEngine;
 
 namespace SpaceProject.Objects.Spaceship
 {
-    public enum StrafeMode
-    { 
-        ToUp,
-        ToDown,
-        ToLeft,
-        ToRight,
-    }
-
-    public enum YawMode
-    { 
-        ToLeft,
-        ToRight,
-    }
-
-    public enum RollMode
-    { 
-        ToLeft,
-        ToRight,
-    }
-
-    public enum PitchMode
-    { 
-        ToDown,
-        ToUp,
-    }
-
-    public enum Command
-    { 
-        OnPitch,
-        OnRoll,
-        OnYaw,
-        OnStrafe,
-    }
-
-    public enum ForceType
-    {
-        Torque,
-        Force,
-    }
-
-    public class CommandData
-    {
-        public Command command;
-        public ForceType type;
-        public Vector3 direction;
-        public ForceMode forceMode;
-    }
-
-
     [RequireComponent(typeof(Rigidbody))]
     public class SpaceshipController : MonoBehaviour
     {
@@ -60,8 +11,8 @@ namespace SpaceProject.Objects.Spaceship
         [SerializeField] private bool isFlightAssist = true;
 
         private new Rigidbody rigidbody;
-        private Dictionary<Command, CommandData> commands = new Dictionary<Command, CommandData>();
-        private Dictionary<Command, CommandData> prevCommands = new Dictionary<Command, CommandData>();
+        private Dictionary<ManeuverCommand, ManeuverCommandData> commands = new Dictionary<ManeuverCommand, ManeuverCommandData>();
+        private List<ManeuverCommand> completedCommands = new List<ManeuverCommand>();
 
 
         private void Awake()
@@ -71,32 +22,37 @@ namespace SpaceProject.Objects.Spaceship
 
         private void FixedUpdate()
         {
-            //Debug.LogError("vel : " + rigidbody.angularVelocity);
+            completedCommands.Clear();
+
+            var vectorDelta = Vector3.zero;
+            var rotationDelta = Vector3.zero;
+            var controllability = data.controllability * Time.fixedDeltaTime;
 
             foreach (var command in commands)
             {
                 switch (command.Value.type)
                 {
-                    case ForceType.Force:
-                        rigidbody.AddForce(command.Value.direction, command.Value.forceMode);
+                    case ManeuverType.Move:
+                        vectorDelta += command.Value.CalculateDirection(controllability);
                         break;
-                    case ForceType.Torque:
-                        rigidbody.AddTorque(command.Value.direction, command.Value.forceMode);
+                    case ManeuverType.Rotate:
+                        rotationDelta += command.Value.CalculateDirection(controllability);
                         break;
                 }
+
+                if (isFlightAssist)
+                {
+                    command.Value.SetTargetDirection(Vector3.zero);
+                    if (command.Value.CheckComplete())
+                        completedCommands.Add(command.Key);
+                }                
             }
 
-            //TODO: переделать FlightAssist!!!
-            //Обнуляем ускорение. По факту - это FlightAssist
-            if (isFlightAssist)
-            {
-                rigidbody.velocity = Vector3.Lerp(rigidbody.velocity, Vector3.zero, data.stopFactor * Time.fixedDeltaTime);
-                rigidbody.angularVelocity = Vector3.Lerp(rigidbody.angularVelocity, Vector3.zero, data.angularStopFactor * Time.fixedDeltaTime);
+            foreach (var completed in completedCommands)
+                commands.Remove(completed);
 
-                //rigidbody.AddTorque(, ForceMode.VelocityChange);
-            }
-            
-            commands.Clear();
+            rigidbody.MoveRotation(rigidbody.rotation * Quaternion.Euler(rotationDelta * Time.fixedDeltaTime));
+            rigidbody.MovePosition(rigidbody.position + vectorDelta * Time.fixedDeltaTime);            
         }
 
 
@@ -107,21 +63,14 @@ namespace SpaceProject.Objects.Spaceship
             switch (_mode)
             {
                 case PitchMode.ToDown:
-                    direction = transform.right;
+                    direction = Vector3.right;
                     break;
                 case PitchMode.ToUp:
-                    direction = -transform.right;
+                    direction = -Vector3.right;
                     break;
             }
 
-            //rigidbody.AddTorque(direction * data.pitchSpeed * _speedMod, ForceMode.VelocityChange);
-            AddCommand(new CommandData()
-            {
-                command = Command.OnPitch,
-                type = ForceType.Torque,
-                direction = direction * data.pitchSpeed * _speedMod,
-                forceMode = ForceMode.VelocityChange
-            });
+            AddCommand(new ManeuverCommandData(ManeuverCommand.OnPitch, ManeuverType.Rotate, direction * data.pitchSpeed * _speedMod));
         }
 
         //крен (roll)
@@ -131,21 +80,14 @@ namespace SpaceProject.Objects.Spaceship
             switch (_mode)
             {
                 case RollMode.ToLeft:
-                    direction = transform.forward;
+                    direction = Vector3.forward;
                     break;
                 case RollMode.ToRight:
-                    direction = -transform.forward;
+                    direction = -Vector3.forward;
                     break;
             }
 
-            //rigidbody.AddTorque(direction * data.rollSpeed * _speedMod, ForceMode.VelocityChange);
-            AddCommand(new CommandData()
-            {
-                command = Command.OnRoll,
-                type = ForceType.Torque,
-                direction = direction * data.rollSpeed * _speedMod,
-                forceMode = ForceMode.VelocityChange
-            });
+            AddCommand(new ManeuverCommandData(ManeuverCommand.OnRoll, ManeuverType.Rotate, direction * data.rollSpeed * _speedMod));
         }
 
         //рыскание (yaw)
@@ -155,35 +97,31 @@ namespace SpaceProject.Objects.Spaceship
             switch (_mode)
             {
                 case YawMode.ToLeft:
-                    direction = -transform.up;
+                    direction = -Vector3.up;
                     break;
                 case YawMode.ToRight:
-                    direction = transform.up;
+                    direction = Vector3.up;
                     break;
             }
 
-            //rigidbody.AddTorque(direction * data.yawSpeed * _speedMod, ForceMode.VelocityChange);
-            AddCommand(new CommandData()
-            {
-                command = Command.OnYaw,
-                type = ForceType.Torque,
-                direction = direction * data.yawSpeed * _speedMod,
-                forceMode = ForceMode.VelocityChange
-            });
+            AddCommand(new ManeuverCommandData(ManeuverCommand.OnYaw, ManeuverType.Rotate, direction * data.yawSpeed * _speedMod));
         }
 
         //вверх/вниз
         //влево/вправо
         public void OnStrafe(StrafeMode _mode, float _speedMod = 1.0f)
         {
+            var commandType = ManeuverCommand.OnStrafeX;
             var direction = Vector3.zero;
             switch (_mode)
             {
                 case StrafeMode.ToUp:
+                    commandType = ManeuverCommand.OnStrafeY;
                     direction = transform.up;
                     break;
 
                 case StrafeMode.ToDown:
+                    commandType = ManeuverCommand.OnStrafeY;
                     direction = -transform.up;
                     break;
 
@@ -196,21 +134,14 @@ namespace SpaceProject.Objects.Spaceship
                     break;
             }
 
-            //rigidbody.AddForce(direction * data.strafeSpeed * _speedMod, ForceMode.VelocityChange);
-            AddCommand(new CommandData()
-            {
-                command = Command.OnStrafe,
-                type = ForceType.Force,
-                direction = direction * data.strafeSpeed * _speedMod,
-                forceMode = ForceMode.VelocityChange
-            });
+            AddCommand(new ManeuverCommandData(commandType, ManeuverType.Move, direction * data.strafeSpeed * _speedMod));
         }
 
 
-        private void AddCommand(CommandData _data)
+        private void AddCommand(ManeuverCommandData _data)
         {
             if (commands.ContainsKey(_data.command))
-                commands[_data.command] = _data;
+                commands[_data.command].SetTargetDirection(_data.direction);
             else
                 commands.Add(_data.command, _data);
         }

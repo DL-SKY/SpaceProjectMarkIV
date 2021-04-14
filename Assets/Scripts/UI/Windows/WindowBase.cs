@@ -17,16 +17,24 @@ namespace SpaceProject.UI.Windows
             OnInitialize?.Invoke();
         }
 
-        public virtual void Close(bool _result = false)
+        public void Close(bool _result = false)
         {
             OnClose?.Invoke(_result, this);
             Destroy(gameObject);
+
+            CustomClose(_result);
         }
 
-        public virtual void OnClickEsc()
+        public void OnClickEsc()
         {
             if (canUseEsc)
                 Close();
+
+            CustomOnClickEsc();
         }
+
+
+        protected virtual void CustomClose(bool _result) { }
+        protected virtual void CustomOnClickEsc() { }
     }
 }

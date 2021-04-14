@@ -12,23 +12,20 @@ namespace SpaceProject.Application
 {
     public class GameManager : Singleton<GameManager>
     {
-        protected override void Awake()
-        {
-            base.Awake();
-        }
-
         private void Start()
         {
             SceneManager.sceneLoaded += OnSceneLoadedHandler;
 
+
+            //UnityEngine.Application.targetFrameRate = 60;
+
+
             Initialize();
         }
 
-        protected override void OnDestroy()
+        protected override void CustomOnDestroy()
         {
             SceneManager.sceneLoaded -= OnSceneLoadedHandler;
-
-            base.OnDestroy();
         }
 
 

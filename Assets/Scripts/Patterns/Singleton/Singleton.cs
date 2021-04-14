@@ -36,16 +36,23 @@ namespace SpaceProject.Patterns
         }
 
 
-        protected virtual void Awake()
+        protected void Awake()
         {
             if (!IsInstantiated)
                 instance = GetComponent<T>();
+
+            CustomAwake();
         }
 
-        protected virtual void OnDestroy()
+        protected void OnDestroy()
         {
             if (instance == this)
                 instance = null;
+
+            CustomOnDestroy();
         }
+
+        protected virtual void CustomAwake() { }
+        protected virtual void CustomOnDestroy() { }
     }
 }

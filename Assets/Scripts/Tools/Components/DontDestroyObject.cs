@@ -4,7 +4,7 @@ namespace SpaceProject.Tools.Components
 {
     public class DontDestroyObject : MonoBehaviour
     {
-        protected virtual void Awake()
+        private void Awake()
         {
             DontDestroyOnLoad(gameObject);
         }

@@ -16,7 +16,7 @@
             Enabled = _state;
         }
 
-        public virtual void Update()
+        public void Update()
         {
             if (Enabled)
                 CustomUpdate();

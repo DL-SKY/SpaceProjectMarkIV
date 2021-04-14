@@ -21,10 +21,9 @@ namespace SpaceProject.UI.Windows.Test
             base.Initialize(_data);
         }
 
-        public override void Close(bool _result = false)
-        {
-            base.Close(_result);
 
+        protected override void CustomClose(bool _result)
+        {
             var windowsManager = ComponentLocator.Resolve<WindowsManager.WindowsManager>();
             windowsManager.CreateWindow<MainMenuWindow>(MainMenuWindow.prefabPath, Enums.EnumWindowsLayer.Main);
         }
