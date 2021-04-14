@@ -11,6 +11,10 @@
                 case EnumSubsystems.Maneuver:
                     result = new ManeuverSubsystem(_spaceship);
                     break;
+
+                case EnumSubsystems.Engine:
+                    result = new EngineSubsystem(_spaceship);
+                    break;
             }
 
             return result;

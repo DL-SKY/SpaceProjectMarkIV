@@ -122,9 +122,14 @@ namespace SpaceProject.Objects.Spaceship
 
         private void CreateSubsystems()
         {
+            var newSubsystems = new EnumSubsystems[] 
+                { 
+                    EnumSubsystems.Maneuver, 
+                    EnumSubsystems.Engine,
+                };
+
             subsystems.Clear();
 
-            var newSubsystems = new EnumSubsystems[] { EnumSubsystems.Maneuver };
             foreach (var subsystem in newSubsystems)
                 subsystems.Add(subsystem, SubsystemCreator.Create(subsystem, this));
         }

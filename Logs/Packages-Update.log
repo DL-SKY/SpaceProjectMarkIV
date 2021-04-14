@@ -56,3 +56,16 @@ The following packages were added:
   com.unity.ide.visualstudio@1.0.11
   com.unity.postprocessing@2.3.0
   com.unity.xr.legacyinputhelpers@2.0.2
+
+=== Wed Apr 14 20:29:00 2021
+
+Packages were changed.
+Update Mode: updateDependencies
+
+The following packages were added:
+  com.unity.ads@3.4.7
+  com.unity.analytics@3.3.5
+  com.unity.multiplayer-hlapi@1.0.6
+  com.unity.purchasing@2.0.6
+The following packages were updated:
+  com.unity.xr.legacyinputhelpers from version 2.0.2 to 2.1.4

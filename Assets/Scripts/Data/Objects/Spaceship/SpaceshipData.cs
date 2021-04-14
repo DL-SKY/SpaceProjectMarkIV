@@ -7,9 +7,11 @@ namespace SpaceProject.Data.Objects.Spaceship
     {
         public float controllability = 10.0f;       //Управляемость
 
-        public float pitchSpeed = 0.25f;            //
-        public float rollSpeed = 0.25f;             //
-        public float yawSpeed = 0.25f;              //
+        public float maxSpeed = 150.0f;
+
+        public float pitchSpeed = 0.25f;
+        public float rollSpeed = 0.25f;
+        public float yawSpeed = 0.25f;
 
         public float strafeSpeed = 2.5f;
     }

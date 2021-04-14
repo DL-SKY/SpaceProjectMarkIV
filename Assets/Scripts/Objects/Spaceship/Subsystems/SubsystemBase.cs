@@ -8,6 +8,7 @@ namespace SpaceProject.Objects.Spaceship.Subsystems
     public enum EnumSubsystems
     { 
         Maneuver,
+        Engine,
     }
 
     public enum EnumSubsystemExecuteType
