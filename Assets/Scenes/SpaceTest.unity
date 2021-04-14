@@ -513,9 +513,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data:
-    controllability: 2
-    pitchSpeed: 10
-    rollSpeed: 10
+    controllability: 2.5
+    pitchSpeed: 15
+    rollSpeed: 25
     yawSpeed: 10
     strafeSpeed: 5
   isFlightAssist: 1

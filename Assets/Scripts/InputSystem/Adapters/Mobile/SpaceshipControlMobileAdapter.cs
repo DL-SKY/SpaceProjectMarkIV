@@ -1,7 +1,10 @@
 ﻿using SpaceProject.Constants;
+using SpaceProject.Data.Objects.Spaceship;
 using SpaceProject.Events;
 using SpaceProject.Objects.Spaceship;
 using SpaceProject.Services;
+using System;
+using UnityEngine;
 
 namespace SpaceProject.InputSystem.Adapters
 {
@@ -27,18 +30,35 @@ namespace SpaceProject.InputSystem.Adapters
         }
 
 
-        protected override void CustomUpdate()
-        { 
-            //TODO
+        public void SendCommand(ManeuverCommand _maneuverCommand, float _speedMod = 1.0f)
+        {
+            switch (_maneuverCommand)
+            {
+                case ManeuverCommand.OnPitch:
+                    playerSpaceship.Spaceship.OnPitch(_speedMod > 0.0f ? PitchMode.ToUp : PitchMode.ToDown, Mathf.Abs(_speedMod));
+                    break;
 
-            //тангаж (pitch)
-            //крен (roll)
+                case ManeuverCommand.OnRoll:
+                    playerSpaceship.Spaceship.OnRoll(_speedMod > 0.0f ? RollMode.ToRight : RollMode.ToLeft, Mathf.Abs(_speedMod));
+                    break;
 
-            //рыскание (yaw)
+                case ManeuverCommand.OnYaw:
+                    playerSpaceship.Spaceship.OnYaw(_speedMod > 0.0f ? YawMode.ToRight : YawMode.ToLeft, Mathf.Abs(_speedMod));
+                    break;
 
-            //вверх/вниз
-            //влево/вправо
+                case ManeuverCommand.OnStrafeY:
+                    playerSpaceship.Spaceship.OnStrafe(_speedMod > 0.0f ? StrafeMode.ToUp : StrafeMode.ToDown, Mathf.Abs(_speedMod));
+                    break;
+
+                case ManeuverCommand.OnStrafeX:
+                    playerSpaceship.Spaceship.OnStrafe(_speedMod > 0.0f ? StrafeMode.ToRight : StrafeMode.ToLeft, Mathf.Abs(_speedMod));
+                    break;
+            }
         }
+
+
+        protected override void CustomUpdate() { }
+
 
         private void OnPlayerSpaceshipCreateHandler(CustomEvent _event)
         {

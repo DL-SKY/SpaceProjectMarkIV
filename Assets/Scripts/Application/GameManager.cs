@@ -18,6 +18,9 @@ namespace SpaceProject.Application
 
 
             //UnityEngine.Application.targetFrameRate = 60;
+#if UNITY_ANDROID
+            UnityEngine.Application.targetFrameRate = 60;
+#endif
 
 
             Initialize();

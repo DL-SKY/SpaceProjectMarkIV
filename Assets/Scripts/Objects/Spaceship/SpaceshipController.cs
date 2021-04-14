@@ -1,4 +1,5 @@
 ﻿using SpaceProject.Data.Objects.Spaceship;
+using SpaceProject.Objects.Spaceship.Subsystems;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,52 +11,32 @@ namespace SpaceProject.Objects.Spaceship
         [SerializeField] private SpaceshipData data;
         [SerializeField] private bool isFlightAssist = true;
 
-        private new Rigidbody rigidbody;
-        private Dictionary<ManeuverCommand, ManeuverCommandData> commands = new Dictionary<ManeuverCommand, ManeuverCommandData>();
-        private List<ManeuverCommand> completedCommands = new List<ManeuverCommand>();
+        public Rigidbody Rigidbody { get; private set; }
+        
+        private Dictionary<EnumSubsystems, SubsystemBase> subsystems = new Dictionary<EnumSubsystems, SubsystemBase>();
 
-
+        
         private void Awake()
         {
-            rigidbody = GetComponent<Rigidbody>();
+            Rigidbody = GetComponent<Rigidbody>();
+
+            CreateSubsystems();
         }
 
         private void FixedUpdate()
         {
-            completedCommands.Clear();
-
-            var vectorDelta = Vector3.zero;
-            var rotationDelta = Vector3.zero;
-            var controllability = data.controllability * Time.fixedDeltaTime;
-
-            foreach (var command in commands)
-            {
-                switch (command.Value.type)
-                {
-                    case ManeuverType.Move:
-                        vectorDelta += command.Value.CalculateDirection(controllability);
-                        break;
-                    case ManeuverType.Rotate:
-                        rotationDelta += command.Value.CalculateDirection(controllability);
-                        break;
-                }
-
-                if (isFlightAssist)
-                {
-                    command.Value.SetTargetDirection(Vector3.zero);
-                    if (command.Value.CheckComplete())
-                        completedCommands.Add(command.Key);
-                }                
-            }
-
-            foreach (var completed in completedCommands)
-                commands.Remove(completed);
-
-            rigidbody.MoveRotation(rigidbody.rotation * Quaternion.Euler(rotationDelta * Time.fixedDeltaTime));
-            rigidbody.MovePosition(rigidbody.position + vectorDelta * Time.fixedDeltaTime);            
+            foreach (var subsystem in subsystems)
+                if (subsystem.Value.ExecuteType == EnumSubsystemExecuteType.FixedUpdate)
+                    subsystem.Value.Execute();
         }
 
 
+        public SpaceshipData GetData()
+        {
+            return data;
+        }
+
+        #region ManeuverSubsystem
         //тангаж (pitch)
         public void OnPitch(PitchMode _mode, float _speedMod = 1.0f)
         {
@@ -136,14 +117,21 @@ namespace SpaceProject.Objects.Spaceship
 
             AddCommand(new ManeuverCommandData(commandType, ManeuverType.Move, direction * data.strafeSpeed * _speedMod));
         }
+        #endregion
 
+
+        private void CreateSubsystems()
+        {
+            subsystems.Clear();
+
+            var newSubsystems = new EnumSubsystems[] { EnumSubsystems.Maneuver };
+            foreach (var subsystem in newSubsystems)
+                subsystems.Add(subsystem, SubsystemCreator.Create(subsystem, this));
+        }
 
         private void AddCommand(ManeuverCommandData _data)
         {
-            if (commands.ContainsKey(_data.command))
-                commands[_data.command].SetTargetDirection(_data.direction);
-            else
-                commands.Add(_data.command, _data);
+            (subsystems[EnumSubsystems.Maneuver] as ManeuverSubsystem).AddCommand(_data);
         }
     }
 }

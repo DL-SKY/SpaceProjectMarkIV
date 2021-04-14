@@ -50,6 +50,14 @@ namespace SpaceProject.InputSystem
                 adapters[_adapter].SetEnable(_state);
         }
 
+        public InputAdapter GetAdapter(EnumInputAdapters _adapter)
+        {
+            if (adapters.ContainsKey(_adapter))
+                return adapters[_adapter];
+            else
+                return null;
+        }
+
 
         private InputAdapter GetSpaceshipControlAdapter()
         {

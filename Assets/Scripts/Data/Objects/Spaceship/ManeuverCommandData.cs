@@ -35,6 +35,9 @@ namespace SpaceProject.Data.Objects.Spaceship
         OnYaw,
         OnStrafeX,
         OnStrafeY,
+
+
+        None = 999,
     }
 
     public enum ManeuverType
