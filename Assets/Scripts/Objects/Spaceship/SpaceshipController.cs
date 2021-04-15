@@ -119,6 +119,13 @@ namespace SpaceProject.Objects.Spaceship
         }
         #endregion
 
+        #region EngineSubsystem
+        public void OnEngineSpeedChange(float _speedMod = 1.0f)
+        {
+            AddCommand(_speedMod);
+        }
+        #endregion
+
 
         private void CreateSubsystems()
         {
@@ -137,6 +144,11 @@ namespace SpaceProject.Objects.Spaceship
         private void AddCommand(ManeuverCommandData _data)
         {
             (subsystems[EnumSubsystems.Maneuver] as ManeuverSubsystem).AddCommand(_data);
+        }
+
+        private void AddCommand(float _deltaMod)
+        {
+            (subsystems[EnumSubsystems.Engine] as EngineSubsystem).ChangeSpeed(_deltaMod);
         }
     }
 }

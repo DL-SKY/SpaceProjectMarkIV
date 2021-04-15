@@ -53,6 +53,10 @@ namespace SpaceProject.InputSystem.Adapters
                 case ManeuverCommand.OnStrafeX:
                     playerSpaceship.Spaceship.OnStrafe(_speedMod > 0.0f ? StrafeMode.ToRight : StrafeMode.ToLeft, Mathf.Abs(_speedMod));
                     break;
+
+                case ManeuverCommand.OnEngineSpeedChange:
+                    playerSpaceship.Spaceship.OnEngineSpeedChange(_speedMod);
+                    break;
             }
         }
 

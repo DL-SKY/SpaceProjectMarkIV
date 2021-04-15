@@ -36,6 +36,7 @@ namespace SpaceProject.Data.Objects.Spaceship
         OnStrafeX,
         OnStrafeY,
 
+        OnEngineSpeedChange,
 
         None = 999,
     }
