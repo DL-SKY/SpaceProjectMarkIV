@@ -23,13 +23,13 @@ namespace SpaceProject.Objects.Spaceship.Subsystems
         }
 
 
-        public override void Execute()
+        public override void Execute(float _deltaTime)
         {
             completedCommands.Clear();
 
             var vectorDelta = Vector3.zero;
             var rotationDelta = Vector3.zero;
-            var controllability = data.controllability * Time.fixedDeltaTime;
+            var controllability = data.controllability * _deltaTime;
 
             foreach (var command in commands)
             {
@@ -54,8 +54,8 @@ namespace SpaceProject.Objects.Spaceship.Subsystems
             foreach (var completed in completedCommands)
                 commands.Remove(completed);
 
-            rigidbody.MoveRotation(rigidbody.rotation * Quaternion.Euler(rotationDelta * Time.fixedDeltaTime));
-            rigidbody.MovePosition(rigidbody.position + vectorDelta * Time.fixedDeltaTime);
+            rigidbody.MoveRotation(rigidbody.rotation * Quaternion.Euler(rotationDelta * _deltaTime));
+            rigidbody.MovePosition(rigidbody.position + vectorDelta * _deltaTime);
         }
 
         public void AddCommand(ManeuverCommandData _data)

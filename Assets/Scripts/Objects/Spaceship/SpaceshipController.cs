@@ -27,7 +27,7 @@ namespace SpaceProject.Objects.Spaceship
         {
             foreach (var subsystem in subsystems)
                 if (subsystem.Value.ExecuteType == EnumSubsystemExecuteType.FixedUpdate)
-                    subsystem.Value.Execute();
+                    subsystem.Value.Execute(Time.fixedDeltaTime);
         }
 
 
@@ -148,7 +148,7 @@ namespace SpaceProject.Objects.Spaceship
 
         private void AddCommand(float _deltaMod)
         {
-            (subsystems[EnumSubsystems.Engine] as EngineSubsystem).ChangeSpeed(_deltaMod);
+            (subsystems[EnumSubsystems.Engine] as EngineSubsystem).ChangeSpeedMod(_deltaMod);
         }
     }
 }

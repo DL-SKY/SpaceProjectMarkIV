@@ -31,6 +31,6 @@ namespace SpaceProject.Objects.Spaceship.Subsystems
             data = _spaceship.GetData();
         }
 
-        abstract public void Execute();
+        abstract public void Execute(float _deltaTime);
     }
 }

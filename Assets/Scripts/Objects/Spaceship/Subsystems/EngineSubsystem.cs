@@ -8,6 +8,7 @@ namespace SpaceProject.Objects.Spaceship.Subsystems
 
         private float currentSpeed;
         private float targetSpeed;
+        private float speedMod;
 
         //TODO
         private bool isFlightAssist = true;
@@ -21,17 +22,22 @@ namespace SpaceProject.Objects.Spaceship.Subsystems
         }
 
 
-        public override void Execute()
+        public override void Execute(float _deltaTime)
         {
-            currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, data.GetMaxChangeSpeedDelta() * Time.fixedDeltaTime);
+            targetSpeed += data.GetMaxChangeSpeedDelta() * speedMod * _deltaTime;
+            targetSpeed = Mathf.Clamp(targetSpeed, 0.0f, data.maxSpeed);
+
+
+            currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, data.GetMaxChangeSpeedDelta() * _deltaTime);
+
+            Debug.LogError("Speed : " + currentSpeed + "/" + targetSpeed);
 
             //TODO
         }
 
-        public void ChangeSpeed(float _speedMod)
+        public void ChangeSpeedMod(float _speedMod)
         {
-            targetSpeed += data.GetMaxChangeSpeedDelta() * _speedMod;
-            Mathf.Clamp(targetSpeed, 0.0f, data.maxSpeed);
+            speedMod = _speedMod;
         }
     }
 }
