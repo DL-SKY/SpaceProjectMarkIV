@@ -5,6 +5,7 @@ namespace SpaceProject.Objects.Spaceship.Subsystems
     public class EngineSubsystem : SubsystemBase
     {
         private Rigidbody rigidbody;
+        private Transform transform;
 
         private float currentSpeed;
         private float targetSpeed;
@@ -19,6 +20,7 @@ namespace SpaceProject.Objects.Spaceship.Subsystems
             ExecuteType = EnumSubsystemExecuteType.FixedUpdate;
 
             rigidbody = _spaceship.Rigidbody;
+            transform = rigidbody.transform;
         }
 
 
@@ -27,12 +29,15 @@ namespace SpaceProject.Objects.Spaceship.Subsystems
             targetSpeed += data.GetMaxChangeSpeedDelta() * speedMod * _deltaTime;
             targetSpeed = Mathf.Clamp(targetSpeed, 0.0f, data.maxSpeed);
 
-
             currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, data.GetMaxChangeSpeedDelta() * _deltaTime);
 
-            Debug.LogError("Speed : " + currentSpeed + "/" + targetSpeed);
+            //Debug.LogError("Speed : " + currentSpeed + "/" + targetSpeed);
 
             //TODO
+            rigidbody.MovePosition(rigidbody.position + transform.forward * currentSpeed * _deltaTime);
+
+
+            speedMod = 0.0f;
         }
 
         public void ChangeSpeedMod(float _speedMod)

@@ -1,4 +1,5 @@
 ﻿using SpaceProject.Data.Objects.Spaceship;
+using SpaceProject.Enums;
 using SpaceProject.InputSystem;
 using SpaceProject.InputSystem.Adapters;
 using SpaceProject.Services;
@@ -7,21 +8,13 @@ using UnityEngine.EventSystems;
 
 namespace SpaceProject.UI.SpaceshipControl
 {
-    public enum EnumSpaceshipJoystick
-    { 
-        A,
-        B,
-        C,
-    }
-
-
     [RequireComponent(typeof(Joystick))]
     public class SpaceshipJoystick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         private bool isUsed;
 
         [Header("Settings")]
-        public EnumSpaceshipJoystick joystickType;
+        public EnumSpaceshipUIElement joystickType;
         public ManeuverCommand axisXCommandType = ManeuverCommand.None;
         public ManeuverCommand axisYCommandType = ManeuverCommand.None;
 
@@ -35,7 +28,7 @@ namespace SpaceProject.UI.SpaceshipControl
             adapter = (SpaceshipControlMobileAdapter)ComponentLocator.Resolve<InputController>()?.GetAdapter(Enums.EnumInputAdapters.SpaceshipControl);
         }
 
-        private void Update()
+        private void LateUpdate()
         {
             if (isUsed)
             {

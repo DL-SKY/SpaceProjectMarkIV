@@ -55,7 +55,8 @@ namespace SpaceProject.Objects.Spaceship.Subsystems
                 commands.Remove(completed);
 
             rigidbody.MoveRotation(rigidbody.rotation * Quaternion.Euler(rotationDelta * _deltaTime));
-            rigidbody.MovePosition(rigidbody.position + vectorDelta * _deltaTime);
+            //rigidbody.MovePosition(rigidbody.position + vectorDelta * _deltaTime);
+            rigidbody.position = rigidbody.position + vectorDelta * _deltaTime;         //не работает несколько MovePosition()
         }
 
         public void AddCommand(ManeuverCommandData _data)

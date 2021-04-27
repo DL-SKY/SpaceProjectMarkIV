@@ -41,7 +41,7 @@ namespace SpaceProject.UI.WindowsManager
         }
 
 
-        public T CreateWindow<T>(string _pathPrefab, EnumWindowsLayer _layer, object _data = null) where T : WindowBase
+        public T CreateWindow<T>(string _pathPrefab, EnumWindowsLayer _layer, object _data = null, bool _includeInWindowsList = true) where T : WindowBase
         {
             var prefab = Resources.Load<GameObject>(string.Format(_pathPrefab));
             var layer = layers.Find((x) => x.key == _layer)?.value ?? transform;
@@ -50,7 +50,8 @@ namespace SpaceProject.UI.WindowsManager
             window.OnClose += OnCloseHandler;
             window.Initialize(_data);
 
-            windows.Add(window);
+            if (_includeInWindowsList)
+                windows.Add(window);
 
             OnCreateWindow?.Invoke(window);
 

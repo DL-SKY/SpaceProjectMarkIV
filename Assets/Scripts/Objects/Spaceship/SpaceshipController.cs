@@ -1,14 +1,35 @@
 ﻿using SpaceProject.Data.Objects.Spaceship;
+using SpaceProject.Enums;
 using SpaceProject.Objects.Spaceship.Subsystems;
+using SpaceProject.ScriptableObjects.Data;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace SpaceProject.Objects.Spaceship
 {
+    [Serializable]
+    public class SpaceshipUIElementPosition
+    {
+        public EnumSpaceshipUIElement uiElement;
+        public Vector3 position;
+        public Vector3 rotation;
+    }
+
+    [Serializable]
+    public class SpaceshipUIControlPosition
+    {
+        public EnumSpaceshipUIElement uiElement;
+        public Vector2 anchorMin;
+        public Vector2 anchorMax;
+        public Vector2 anchoredPosition;
+    }
+
+
     [RequireComponent(typeof(Rigidbody))]
     public class SpaceshipController : MonoBehaviour
     {
-        [SerializeField] private SpaceshipData data;
+        [SerializeField] private SpaceshipConfig config;
         [SerializeField] private bool isFlightAssist = true;
 
         public Rigidbody Rigidbody { get; private set; }
@@ -33,7 +54,17 @@ namespace SpaceProject.Objects.Spaceship
 
         public SpaceshipData GetData()
         {
-            return data;
+            return config.data;
+        }
+
+        public List<SpaceshipUIElementPosition> GetUI3DElementPositions()
+        {
+            return config.uiElement3DPositions;
+        }
+
+        public List<SpaceshipUIControlPosition> GetUI2DControlPositions()
+        {
+            return config.uiControl2DPosition;
         }
 
         #region ManeuverSubsystem
@@ -51,7 +82,7 @@ namespace SpaceProject.Objects.Spaceship
                     break;
             }
 
-            AddCommand(new ManeuverCommandData(ManeuverCommand.OnPitch, ManeuverType.Rotate, direction * data.pitchSpeed * _speedMod));
+            AddCommand(new ManeuverCommandData(ManeuverCommand.OnPitch, ManeuverType.Rotate, direction * config.data.pitchSpeed * _speedMod));
         }
 
         //крен (roll)
@@ -68,7 +99,7 @@ namespace SpaceProject.Objects.Spaceship
                     break;
             }
 
-            AddCommand(new ManeuverCommandData(ManeuverCommand.OnRoll, ManeuverType.Rotate, direction * data.rollSpeed * _speedMod));
+            AddCommand(new ManeuverCommandData(ManeuverCommand.OnRoll, ManeuverType.Rotate, direction * config.data.rollSpeed * _speedMod));
         }
 
         //рыскание (yaw)
@@ -85,7 +116,7 @@ namespace SpaceProject.Objects.Spaceship
                     break;
             }
 
-            AddCommand(new ManeuverCommandData(ManeuverCommand.OnYaw, ManeuverType.Rotate, direction * data.yawSpeed * _speedMod));
+            AddCommand(new ManeuverCommandData(ManeuverCommand.OnYaw, ManeuverType.Rotate, direction * config.data.yawSpeed * _speedMod));
         }
 
         //вверх/вниз
@@ -115,7 +146,7 @@ namespace SpaceProject.Objects.Spaceship
                     break;
             }
 
-            AddCommand(new ManeuverCommandData(commandType, ManeuverType.Move, direction * data.strafeSpeed * _speedMod));
+            AddCommand(new ManeuverCommandData(commandType, ManeuverType.Move, direction * config.data.strafeSpeed * _speedMod));
         }
         #endregion
 

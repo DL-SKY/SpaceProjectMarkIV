@@ -462,9 +462,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1351128302}
+  - component: {fileID: 1351128305}
   - component: {fileID: 1351128304}
   - component: {fileID: 1351128303}
-  - component: {fileID: 1351128305}
   m_Layer: 0
   m_Name: SpaceShip
   m_TagString: Untagged
@@ -486,6 +486,7 @@ Transform:
   - {fileID: 729320177}
   - {fileID: 877095951}
   - {fileID: 715057742}
+  - {fileID: 1379012385}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -513,13 +514,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dedc8e5166820c41943b852f27c595d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data:
-    controllability: 2.5
-    maxSpeed: 150
-    pitchSpeed: 15
-    rollSpeed: 25
-    yawSpeed: 10
-    strafeSpeed: 5
+  config: {fileID: 11400000, guid: 7d09caa46102a16459f0a79722f1a0d9, type: 2}
   isFlightAssist: 1
 --- !u!54 &1351128305
 Rigidbody:
@@ -537,6 +532,36 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!1 &1379012384
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1379012385}
+  m_Layer: 0
+  m_Name: UIElementPoints
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1379012385
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1379012384}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1351128302}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1739140548
 PrefabInstance:
   m_ObjectHideFlags: 0

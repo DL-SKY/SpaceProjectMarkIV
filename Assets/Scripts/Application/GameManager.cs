@@ -46,6 +46,11 @@ namespace SpaceProject.Application
         //TODO
         private void Initialize()
         {
+            CreateFPSCounter();
+        }
+
+        private void CreateFPSCounter()
+        {
             var windowsManager = ComponentLocator.Resolve<WindowsManager>();
             windowsManager.CreateWindow<GameLoadingWindow>(GameLoadingWindow.prefabPath, Enums.EnumWindowsLayer.Loading);
             windowsManager.CreateWindow<FPSWindow>(FPSWindow.prefabPath, Enums.EnumWindowsLayer.Special);
